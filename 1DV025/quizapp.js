@@ -20,7 +20,6 @@ template.innerHTML = `
 </form>
 <p>Highscore: </p>
 <ol id="highscore">
-<li></li>
 
 </ol>
   </div>
@@ -49,26 +48,30 @@ customElements.define('my-hello',
       // Get the input value
       const usernameInput = this.shadowRoot.querySelector('#username')
       const username = usernameInput.value
-      const time = new Date().toLocaleTimeString()
-      const highscores = [{
-        username, time}]
+      const time = new Date().toLocaleTimeString() 
       const array = []
+      const highscores = {
+        username, time}
+     
+
       // Save the username to session storage
       sessionStorage.setItem('highscore', JSON.stringify(highscores))
-    
+       array.push(highscores)
+       array.sort((a, b) => a.time - b.time)
       // Retrieve and log the stored username
       const storedUsername = JSON.parse(sessionStorage.getItem('highscore'))
       console.log('Stored Username:', storedUsername)
       const highscore = this.shadowRoot.querySelector('#highscore')
       console.log(highscore)
-     storedUsername.forEach(element => {
-        element.username
-        
-     });
-        highscore.textContent = ''
-        const li = this.shadowRoot.querySelector('li')
-        li.textContent = storedUsername
+      // detta funkar
+      // gå igenom arrayen och skapa li element för varje item i arrayen
+      // obs listan begränsas inte till 5, det får ni klura ut själva
+      for (const item of array) {
+        const li = document.createElement('li')
+        li.textContent = item.username + ' ' + item.time
         highscore.appendChild(li)
+        
+      }
 
     }
   }
